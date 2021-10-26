@@ -1,0 +1,36 @@
+li {
+    list-style-type: none;
+}
+
+.main-form {
+    max-width: 1140px;
+    height: 235px;
+    margin: auto;
+}
+
+.main-form__top {
+    max-width: 1140px;
+    margin: auto;
+    display: flex;
+}
+
+.main-form__top-text-header {
+    font-size: 37.71px;
+    line-height: 45.82px;
+    margin: auto;
+    font-weight: 600;
+    text-align: center;
+}
+
+.main-form__top__select {
+    flex: 1;
+}
+
+.main-form__top__text-field {
+    flex: 3;
+}
+
+.main-form__bottom__buttons {
+    width: 350px;
+    margin: auto;
+}
