@@ -57,7 +57,6 @@ function App() {
 
   function onChangeMetroStation(e: any) {
     setMetroStation(e.target.value);
-    console.log(e.target.value);
   }
 
   function onChangeName(e: React.ChangeEvent<HTMLInputElement>) {
@@ -68,19 +67,9 @@ function App() {
     fetchMetro();
   }, []);
 
-  // if (!isLoaded) {
-  //   return (
+  // console.log(window.location)
 
-  //   );
-  // }
-
-  if (error) {
-    return <div>Ошибка: {error}</div>;
-  } else if (items?.items.length === 0) {
-    return <div>К сожалению, по вашему запросу ничего не найдено</div>;
-  } else if (isLoaded) {
-    return <div>Загрузка...</div>;
-  } else {
+  if (!isLoaded) {
     return (
       <div>
         <Box component='form' className='main-form' noValidate>
@@ -128,11 +117,23 @@ function App() {
               </Button>
               <Button variant='outlined'>Карта</Button>
             </div>
-            <div className='main-form__bottom__text-found'>
-              Найдено дохуя вакансий
-            </div>
           </div>
         </Box>
+        {<div></div>}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Ошибка: {error}</div>;
+  } else if (items?.items.length === 0) {
+    return <div>К сожалению, по вашему запросу ничего не найдено</div>;
+  } else if (!isLoaded) {
+    return <div>Загрузка...</div>;
+  } else {
+    return (
+      <div>
+        <div>Найдено дохуя вакансий</div>
         <ul>
           {items?.items.map((item) => (
             <li key={item.id}>
