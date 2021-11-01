@@ -3,7 +3,6 @@ import { Vacancies, Metro } from './types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
@@ -13,9 +12,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './style.css';
 
-function App() {
+export default function App(): JSX.Element {
   const [error, setError] = useState<null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<Vacancies>();
@@ -34,6 +34,7 @@ function App() {
         (result) => {
           setItems(result);
           setIsLoaded(true);
+          localStorage.setItem('previousSearch', `${JSON.stringify(result)}`);
         },
         (error) => {
           setIsLoaded(true);
@@ -48,8 +49,10 @@ function App() {
       .then(
         (result) => {
           setMetro(result);
+          setIsLoaded(true);
         },
         (error) => {
+          setIsLoaded(true);
           setError(error);
         }
       );
@@ -69,12 +72,18 @@ function App() {
 
   // console.log(window.location)
 
-  if (!isLoaded) {
+  if (error) {
+    return <div>Ошибка: {error}</div>;
+  } else if (items?.items.length === 0) {
+    return <div>К сожалению, по вашему запросу ничего не найдено</div>;
+  } else if (!isLoaded) {
+    return <div>Загрузка...</div>;
+  } else {
     return (
       <div>
         <Box component='form' className='main-form' noValidate>
           <div className='main-form__top-text-header'>
-            Найди работу своей пизде
+            Найди уже работу 
           </div>
           <div className='main-form__top'>
             <FormControl fullWidth className='main-form__top__select'>
@@ -119,52 +128,60 @@ function App() {
             </div>
           </div>
         </Box>
-        {<div></div>}
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Ошибка: {error}</div>;
-  } else if (items?.items.length === 0) {
-    return <div>К сожалению, по вашему запросу ничего не найдено</div>;
-  } else if (!isLoaded) {
-    return <div>Загрузка...</div>;
-  } else {
-    return (
-      <div>
-        <div>Найдено дохуя вакансий</div>
-        <ul>
-          {items?.items.map((item) => (
-            <li key={item.id}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                  component='img'
-                  height='140'
-                  image={item.employer?.logo_urls?.['240']}
-                  alt='green iguana'
-                />
-                <CardContent>
-                  <Typography gutterBottom variant='h5' component='div'>
-                    {item.name}
-                  </Typography>
-                  <Typography variant='body2' color='text.secondary'>
-                    {item.snippet?.requirement}
-                  </Typography>
-                  <Typography variant='body2' color='text.secondary'>
-                    {item.snippet?.responsibility}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size='small'>Learn More</Button>
-                </CardActions>
-              </Card>
-            </li>
-          ))}
-        </ul>
+        {items !== undefined ? (
+          <div>
+            <div className='dohuya'>
+              Найдено {items.found} вакансий, пусть идет работать
+            </div>
+            <ul>
+              {items?.items.map((item) => (
+                <li key={item.id}>
+                  <Card className='card'>
+                    <CardContent>
+                      <Typography
+                        color='text.secondary'
+                        className='card_header'
+                        gutterBottom
+                        variant='h5'
+                      >
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        color='text.secondary'
+                        className='card_snippet_1'
+                      >
+                        {item.snippet?.requirement?.replaceAll(
+                          /<(“[^”]*”|'[^’]*’|[^'”>])*>/g,
+                          ''
+                        )}
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        color='text.secondary'
+                        className='card_snippet_2'
+                      >
+                        {item.snippet?.responsibility?.replaceAll(
+                          /<(“[^”]*”|'[^’]*’|[^'”>])*>/g,
+                          ''
+                        )}
+                      </Typography>
+                    </CardContent>
+                    <div className='card_image'>
+                      <CardMedia
+                        className='card_media'
+                        component='img'
+                        image={item.employer?.logo_urls?.['240']}
+                        alt='green iguana'
+                      />
+                    </div>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
     );
   }
 }
-
-export default App;
