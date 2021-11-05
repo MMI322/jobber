@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Vacancies, Metro } from '../../types';
+import { Metro } from '../../types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 function useQuery() {
   const { search } = useLocation();
@@ -22,13 +23,11 @@ function useQuery() {
   }, [search]);
 }
 
-export function Header({
-  setVacancies,
-}: {
-  setVacancies: (vacancies: Vacancies) => void;
-}) {
+export function Header() {
   const { textParam, metroParam } = useQuery();
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const [searchValue, setSeacrhValue] = useState(textParam);
   const [metro, setMetro] = useState<Metro>();
@@ -51,7 +50,7 @@ export function Header({
     )
       .then((res) => res.json())
       .then((result) => {
-        setVacancies(result);
+        dispatch({ type: 'SET_VACANCIES', payload: result });
         history.push(`/?text=${searchValue}&metro=${metroStation}`);
       });
   }

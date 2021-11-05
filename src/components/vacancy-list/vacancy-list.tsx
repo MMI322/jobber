@@ -1,11 +1,14 @@
 import { Vacancies, Vacancy } from '../../types';
 import { VacancyListItem } from '../vacancy-list-item/vacancy-list-item';
+import { useSelector } from 'react-redux';
 
-export function VacancyList({ vacancies }: { vacancies?: Vacancies }) {
+export function VacancyList() {
+  const vacancies = useSelector((state: Vacancies) => state);
+
   if (!vacancies) {
     return null;
   }
-  if (vacancies.items.length === 0) {
+  if (vacancies.found === 0) {
     return <div>Ничего не найдено, сиди на жопе</div>;
   }
   const { items, page, found } = vacancies;
