@@ -47,9 +47,8 @@ li {
   margin: 15px auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
-
 
 .card_image {
   padding: 35px;
@@ -68,4 +67,14 @@ li {
   padding: 10px;
   width: 800px;
   min-height: 300px;
+}
+
+.loading {
+  margin: auto;
+  text-align: center;
+}
+
+highlighttext {
+  color: red;
+  font-weight: 700;
 }

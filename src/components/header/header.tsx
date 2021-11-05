@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Vacancies, Metro } from '../../types';
-import { Link } from 'react-router-dom';
-import VacancyList from '../vacancy-list/vacancy-list';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -9,15 +7,32 @@ import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useLocation, useHistory } from 'react-router-dom';
 
-export default function Header() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [vacancies, setVacancies] = useState<Vacancies>();
-  const [searchValue, setSeacrhValue] = useState('');
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => {
+    const query = new URLSearchParams(search);
+    return {
+      textParam: query.get('text') || '',
+      metroParam: query.get('metro') || '',
+    };
+  }, [search]);
+}
+
+export function Header({
+  setVacancies,
+}: {
+  setVacancies: (vacancies: Vacancies) => void;
+}) {
+  const { textParam, metroParam } = useQuery();
+  const history = useHistory();
+
+  const [searchValue, setSeacrhValue] = useState(textParam);
   const [metro, setMetro] = useState<Metro>();
-  const [metroStation, setMetroStation] = useState();
-  const [prevSearch, setPrevSearch] = useState();
+  const [metroStation, setMetroStation] = useState(metroParam);
 
   function fetchMetro() {
     fetch('https://api.hh.ru/metro/1')
@@ -28,22 +43,20 @@ export default function Header() {
   }
 
   function loadVacancies() {
-    setIsLoading(true);
+    if (!searchValue && !metroStation) return;
     fetch(
       `https://api.hh.ru/${
         searchValue ? `vacancies?text=${searchValue}` : 'vacancies?'
-      }${metroStation !== undefined ? `&metro=${metroStation}&2.1` : ''}&area=1`
+      }${metroStation ? `&metro=${metroStation}` : ''}&area=1`
     )
       .then((res) => res.json())
       .then((result) => {
         setVacancies(result);
-        setIsLoading(false);
-        setPrevSearch(result);
-        //   localStorage.setItem('prevSearch', `${JSON.stringify(result)}`);
+        history.push(`/?text=${searchValue}&metro=${metroStation}`);
       });
   }
 
-  function onChangeMetroStation(e: any) {
+  function onChangeMetroStation(e: SelectChangeEvent) {
     setMetroStation(e.target.value);
   }
 
@@ -51,13 +64,20 @@ export default function Header() {
     setSeacrhValue(e.target.value);
   }
 
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') loadVacancies();
+  }
+
   useEffect(() => {
     fetchMetro();
   }, []);
 
+  useEffect(() => {
+    loadVacancies();
+  }, []);
+
   return (
     <div>
-      <Link to='/vacancy/48502899'>About</Link>
       <Box component='form' className='main-form' noValidate>
         <div className='main-form__top-text-header'>Найди уже работу</div>
         <div className='main-form__top'>
@@ -85,6 +105,7 @@ export default function Header() {
             variant='outlined'
             value={searchValue}
             onChange={onChangeName}
+            onKeyPress={handleKeyPress}
             helperText='Пожалуйста, введите название вакансии'
           />
         </div>
@@ -97,7 +118,6 @@ export default function Header() {
           </div>
         </div>
       </Box>
-      <VacancyList isLoading={isLoading} vacancies={vacancies}></VacancyList>
     </div>
   );
 }

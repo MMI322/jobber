@@ -1,23 +1,14 @@
 import { Vacancies, Vacancy } from '../../types';
-import VacancyListItem from '../vacancy-list-item/vacancy-list-item';
+import { VacancyListItem } from '../vacancy-list-item/vacancy-list-item';
 
-export default function VacancyList({
-  vacancies,
-  isLoading,
-}: {
-  isLoading: boolean;
-  vacancies?: Vacancies;
-}) {
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
+export function VacancyList({ vacancies }: { vacancies?: Vacancies }) {
   if (!vacancies) {
     return null;
   }
   if (vacancies.items.length === 0) {
-    return <div>К сожалению, по вашему запросу ничего не найдено</div>;
+    return <div>Ничего не найдено, сиди на жопе</div>;
   }
-  const { items, page, per_page, found, pages } = vacancies;
+  const { items, page, found } = vacancies;
   return (
     <div>
       <div className='dohuya'>Найдено {found} вакансий, иди работать</div>
