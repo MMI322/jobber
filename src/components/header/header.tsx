@@ -74,10 +74,12 @@ export function Header() {
 
   useEffect(() => {
     fetchMetro();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (searchValue !== '') loadVacancies();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

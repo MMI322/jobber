@@ -1,10 +1,10 @@
-import { Map, YMaps, Placemark } from 'react-yandex-maps';
-import { useSelector } from 'react-redux';
-import { Vacancies, Vacancy } from '../../types';
+import { Map, Placemark } from 'react-yandex-maps';
+// import { useSelector } from 'react-redux';
+// import { Vacancies } from '../../types';
 
 export default function VacancyMap() {
-  const vacancies = useSelector((state: Vacancies) => state);
-  const { items } = vacancies;
+  // const vacancies = useSelector((state: Vacancies) => state);
+  // const { items } = vacancies;
 
   return (
     <Map
