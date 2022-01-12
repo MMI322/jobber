@@ -1,39 +1,41 @@
 type KeySkill = {
-    name: string
-}
+  name: string;
+};
 
 type Address = {
-    city: string
-}
+  city: string;
+  lat: number;
+  lng: number;
+};
 
 type Salary = {
-    from?: number,
-    to?: number,
-    gross?: boolean,
-    currency: string
-}
+  from?: number;
+  to?: number;
+  gross?: boolean;
+  currency: string;
+};
 
 type Employer = {
-    id: string,
-    name: string,
-    description?: string,
-    logo_urls: {
-        '90': string,
-        '240': string,
-        original: string
-    }
-}
+  id: string;
+  name: string;
+  description?: string;
+  logo_urls: {
+    '90': string;
+    '240': string;
+    original: string;
+  };
+};
 
 export type Vacancy = {
-    id: string,
-    description: string,
-    key_skills?: KeySkill[],
-    address?: Address,
-    salary?: Salary,
-    name: string,
-    employer?: Employer
-    snippet: {
-        responsibility: string,
-        requirement: string
-    }
-}
+  id: string;
+  description: string;
+  key_skills?: KeySkill[];
+  address: Address;
+  salary?: Salary;
+  name: string;
+  employer?: Employer;
+  snippet: {
+    responsibility: string;
+    requirement: string;
+  };
+};

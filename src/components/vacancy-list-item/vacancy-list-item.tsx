@@ -13,7 +13,7 @@ export function VacancyListItem({
   id,
 }: Vacancy) {
   return (
-    <Card className='card'>
+    <Card className='card' variant='outlined' sx={{ borderRadius: 2, fontFamily: 'Cabin' }}> 
       <CardContent>
         <Typography
           color='text.secondary'

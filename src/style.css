@@ -1,3 +1,8 @@
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
 li {
   list-style-type: none;
 }
@@ -15,11 +20,11 @@ li {
 }
 
 .main-form__top-text-header {
-  font-size: 37.71px;
-  line-height: 45.82px;
-  margin: auto;
-  font-weight: 600;
+  font-size: 37px;
+  line-height: 45px;
+  margin: 50px auto;
   text-align: center;
+  font-weight: 500;
 }
 
 .main-form__top__select {
@@ -31,14 +36,22 @@ li {
 }
 
 .main-form__bottom__buttons {
-  width: 350px;
+  width: 380px;
   margin: auto;
 }
 
+.search-button {
+  height: 56px;
+}
+
+.main-form__bottom__buttons a button {
+  margin: 0 10px;
+}
 .dohuya {
-  margin: auto;
-  width: 400px;
+  margin: 35px auto;
+  width: 500px;
   text-align: center;
+  font-size: 26px;
 }
 
 .card {
@@ -77,4 +90,49 @@ li {
 highlighttext {
   color: red;
   font-weight: 700;
+}
+
+.pagination {
+  max-width: 400px;
+  margin: auto;
+  position: absolute;
+  top: 590%;
+  left: 600px;
+  padding-bottom: 50px;
+}
+
+.vacancy_card {
+  margin: auto;
+  max-width: 1140px;
+}
+
+.card_header {
+  display: flex;
+  justify-content: space-around;
+}
+
+.card_header_data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
+
+}
+
+.vacancy_skills {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.vacancy_key_skill {
+  background-color: #1976d2;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
+a, a:visited {
+  text-decoration: none;
 }

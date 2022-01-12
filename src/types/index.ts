@@ -1,3 +1,3 @@
 export type { Vacancy } from './vacancy';
-export type { Vacancies } from './vacancies';
-export type { Metro } from './metro'
+export type { Vacancies, State } from './vacancies';
+export type { Metro } from './metro';

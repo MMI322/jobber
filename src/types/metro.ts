@@ -1,13 +1,13 @@
-export type MetroStation = {
+export type Station = {
     id: string,
     name: string
 }
 
-export type MetroLines = {
-    stations: MetroStation[],
+export type Lines = {
+    stations: Station[],
     id: string, 
 }
 
 export type Metro = {
-    lines: MetroLines[]
+    lines: Lines[]
 }

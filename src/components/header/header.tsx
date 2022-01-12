@@ -3,13 +3,12 @@ import { Metro } from '../../types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import FormHelperText from '@mui/material/FormHelperText';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { loadVacanciesAction } from '../../redux/actions';
+import Autocomplete from '@mui/material/Autocomplete';
+import { Station } from '../../types/metro';
 
 function useQuery() {
   const { search } = useLocation();
@@ -29,38 +28,44 @@ export function Header() {
 
   const dispatch = useDispatch();
 
-  const [searchValue, setSeacrhValue] = useState(textParam);
-  const [metro, setMetro] = useState<Metro>();
-  const [metroStation, setMetroStation] = useState(metroParam);
+  const [searchValue, setSearchValue] = useState(textParam);
+  const [metro, setMetro] = useState<Station[]>();
+  const [searchMetro, setSearchMetro] = useState<Station | null>(null);
 
   function fetchMetro() {
     fetch('https://api.hh.ru/metro/1')
       .then((res) => res.json())
-      .then((result) => {
-        setMetro(result);
+      .then((result: Metro) => {
+        let stations: Station[] = result?.lines.reduce(
+          (acc, item) => [...acc, ...item.stations],
+          []
+        );
+
+        setMetro(stations);
+        if (metroParam) {
+          let findedMetroStation = stations.find(
+            (item) => item.id === metroParam
+          );
+          setSearchMetro(findedMetroStation);
+        }
       });
   }
 
   function loadVacancies() {
-    if (!searchValue && !metroStation) return;
-    fetch(
-      `https://api.hh.ru/${
-        searchValue ? `vacancies?text=${searchValue}` : 'vacancies?'
-      }${metroStation ? `&metro=${metroStation}` : ''}&area=1`
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        dispatch({ type: 'SET_VACANCIES', payload: result });
-        history.push(`/?text=${searchValue}&metro=${metroStation}`);
-      });
+    dispatch({
+      type: 'SET_QUERY',
+      payload: { searchValue, searchMetro: searchMetro?.id },
+    });
+    dispatch(loadVacanciesAction(history.push));
   }
 
-  function onChangeMetroStation(e: SelectChangeEvent) {
-    setMetroStation(e.target.value);
+  function onChangeMetroStation(e: any, value: Station | null) {
+    console.log(value);
+    setSearchMetro(value);
   }
 
   function onChangeName(e: React.ChangeEvent<HTMLInputElement>) {
-    setSeacrhValue(e.target.value);
+    setSearchValue(e.target.value);
   }
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -72,31 +77,33 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    loadVacancies();
+    if (searchValue !== '') loadVacancies();
   }, []);
 
   return (
-    <div>
+    <div className='header'>
       <Box component='form' className='main-form' noValidate>
         <div className='main-form__top-text-header'>Найди уже работу</div>
         <div className='main-form__top'>
-          <FormControl fullWidth className='main-form__top__select'>
-            <InputLabel id='demo-simple-select-label'>Станция</InputLabel>
-            <Select
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
-              value={metroStation || ''}
-              onChange={onChangeMetroStation}
-              MenuProps={{ PaperProps: { sx: { maxHeight: 100 } } }}
-            >
-              {metro?.lines.map((item) =>
-                item.stations.map((item) => (
-                  <MenuItem value={item.id}>{item.name || ''}</MenuItem>
-                ))
-              )}
-            </Select>
-            <FormHelperText>Пожалуйста, выберите станцию метро</FormHelperText>
-          </FormControl>
+          <Autocomplete<Station>
+            value={searchMetro}
+            onChange={onChangeMetroStation}
+            getOptionLabel={(option) => option.name || ''}
+            options={metro || []}
+            renderOption={(props, option) => {
+              return (
+                <li {...props} key={option.id}>
+                  {option.name}
+                </li>
+              );
+            }}
+            filterSelectedOptions
+            sx={{ width: 300, mr: 2 }}
+            renderInput={(params) => (
+              <TextField {...params} label='Введи станцию йоба' />
+            )}
+          />
+
           <TextField
             className='main-form__top__text-field'
             id='outlined-basic'
@@ -107,13 +114,42 @@ export function Header() {
             onKeyPress={handleKeyPress}
             helperText='Пожалуйста, введите название вакансии'
           />
+          <Button
+            className='search-button'
+            variant='contained'
+            onClick={loadVacancies}
+            sx={{ ml: 2 }}
+          >
+            Поиск
+          </Button>
         </div>
         <div className='main-form__bottom'>
           <div className='main-form__bottom__buttons'>
-            <Button variant='contained' onClick={loadVacancies}>
-              Поиск
-            </Button>
-            <Button variant='outlined'>Карта</Button>
+            <Link to='/'>
+              <Button
+                variant={
+                  window.location.href.indexOf('map') > -1
+                    ? 'outlined'
+                    : 'contained'
+                }
+                sx={{ width: 170, height: 40 }}
+              >
+                Список
+              </Button>
+            </Link>
+
+            <Link to='/map'>
+              <Button
+                variant={
+                  window.location.href.indexOf('map') > -1
+                    ? 'contained'
+                    : 'outlined'
+                }
+                sx={{ width: 170, height: 40 }}
+              >
+                Карта
+              </Button>
+            </Link>
           </div>
         </div>
       </Box>
