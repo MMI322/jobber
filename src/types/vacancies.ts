@@ -17,4 +17,5 @@ export type State = Vacancies & {
     searchValue: string;
     searchMetro: string;
   };
+  searchMapValue: number[][];
 };

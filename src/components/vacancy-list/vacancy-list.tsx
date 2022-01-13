@@ -28,9 +28,11 @@ export function VacancyList() {
 
   function handleChangePage(_: any, value: number) {
     window.scrollTo(0, 0);
-    dispatch({ type: 'SET_PAGE_VALUE', payload: (value === 0 ? value : value - 1) });
+    dispatch({
+      type: 'SET_PAGE_VALUE',
+      payload: value === 0 ? value : value - 1,
+    });
     dispatch(loadVacanciesAction(history.push, value - 1));
-    console.log('page changed to', value);
   }
 
   if (!vacancies) {
@@ -51,7 +53,7 @@ export function VacancyList() {
       </div>
       {vacancies.found !== 0 ? (
         <div className='pagination'>
-          <Stack spacing={2} sx={{mt: 16}}>
+          <Stack spacing={2} sx={{ mt: 16 }}>
             <Pagination
               count={pages}
               page={Number(currentPage) + 1}

@@ -1,5 +1,5 @@
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 400;
 }
 
@@ -38,6 +38,14 @@ li {
 .main-form__bottom__buttons {
   width: 380px;
   margin: auto;
+}
+
+.main-form__bottom {
+  margin: 40px 0;
+}
+
+.header {
+  margin-bottom: 60px;
 }
 
 .search-button {
@@ -135,4 +143,11 @@ highlighttext {
 
 a, a:visited {
   text-decoration: none;
+}
+
+.map {
+  max-width: 1040px;
+  max-height: 720px;
+  margin: auto;
+  padding: 10px;
 }

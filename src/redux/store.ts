@@ -14,6 +14,10 @@ const defaultState: State = {
     searchValue: '',
     searchMetro: '',
   },
+  searchMapValue: [
+    [55.7, 37.6],
+    [55.8, 37.7],
+  ],
 };
 
 const vacanciesReducer = (state = defaultState, action: AnyAction) => {
@@ -24,6 +28,8 @@ const vacanciesReducer = (state = defaultState, action: AnyAction) => {
       return { ...state, query: action.payload };
     case 'SET_PAGE_VALUE':
       return { ...state, page_value: action.payload };
+    case 'SET_MAP_SEARCH_VALUE':
+      return { ...state, searchMapValue: action.payload };
     default:
       return state;
   }

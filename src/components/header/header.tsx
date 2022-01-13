@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Metro } from '../../types';
+import { Metro, Vacancies } from '../../types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { loadVacanciesAction } from '../../redux/actions';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -60,7 +60,6 @@ export function Header() {
   }
 
   function onChangeMetroStation(e: any, value: Station | null) {
-    console.log(value);
     setSearchMetro(value);
   }
 
@@ -74,12 +73,12 @@ export function Header() {
 
   useEffect(() => {
     fetchMetro();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (searchValue !== '') loadVacancies();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -125,7 +124,7 @@ export function Header() {
             Поиск
           </Button>
         </div>
-        <div className='main-form__bottom'>
+        {useSelector((state: Vacancies) => state).items.length !== 0 ? <div className='main-form__bottom'>
           <div className='main-form__bottom__buttons'>
             <Link to='/'>
               <Button
@@ -153,7 +152,7 @@ export function Header() {
               </Button>
             </Link>
           </div>
-        </div>
+        </div> : null}
       </Box>
     </div>
   );
