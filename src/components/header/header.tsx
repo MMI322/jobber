@@ -6,7 +6,10 @@ import Button from '@mui/material/Button';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { loadVacanciesAction } from '../../redux/actions';
+import {
+  loadMapVacanciesAction,
+  loadVacanciesAction,
+} from '../../redux/actions';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Station } from '../../types/metro';
 
@@ -31,6 +34,8 @@ export function Header() {
   const [searchValue, setSearchValue] = useState(textParam);
   const [metro, setMetro] = useState<Station[]>();
   const [searchMetro, setSearchMetro] = useState<Station | null>(null);
+
+  const vacancies = useSelector((state: Vacancies) => state);
 
   function fetchMetro() {
     fetch('https://api.hh.ru/metro/1')
@@ -101,7 +106,7 @@ export function Header() {
             filterSelectedOptions
             sx={{ width: 300, mr: 2 }}
             renderInput={(params) => (
-              <TextField {...params} label='Введи станцию йоба' />
+              <TextField {...params} label='Выберите станцию метро' />
             )}
           />
 
@@ -124,35 +129,37 @@ export function Header() {
             Поиск
           </Button>
         </div>
-        {useSelector((state: Vacancies) => state).items.length !== 0 ? <div className='main-form__bottom'>
-          <div className='main-form__bottom__buttons'>
-            <Link to='/'>
-              <Button
-                variant={
-                  window.location.href.indexOf('map') > -1
-                    ? 'outlined'
-                    : 'contained'
-                }
-                sx={{ width: 170, height: 40 }}
-              >
-                Список
-              </Button>
-            </Link>
+        {vacancies.items.length !== 0 ? (
+          <div className='main-form__bottom'>
+            <div className='main-form__bottom__buttons'>
+              <Link to='/'>
+                <Button
+                  variant={
+                    window.location.href.indexOf('map') > -1
+                      ? 'outlined'
+                      : 'contained'
+                  }
+                  sx={{ width: 170, height: 40 }}
+                >
+                  Список
+                </Button>
+              </Link>
 
-            <Link to='/map'>
-              <Button
-                variant={
-                  window.location.href.indexOf('map') > -1
-                    ? 'contained'
-                    : 'outlined'
-                }
-                sx={{ width: 170, height: 40 }}
-              >
-                Карта
-              </Button>
-            </Link>
+              <Link to='/map'>
+                <Button
+                  variant={
+                    window.location.href.indexOf('map') > -1
+                      ? 'contained'
+                      : 'outlined'
+                  }
+                  sx={{ width: 170, height: 40 }}
+                >
+                  Карта
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div> : null}
+        ) : null}
       </Box>
     </div>
   );

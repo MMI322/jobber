@@ -14,7 +14,10 @@ export default function VacancyMap() {
 
   const vacancies = useSelector((state: Vacancies) => state);
   const { items } = vacancies;
-  // let reducedPlacemarks;
+  const filteredItems = items.filter(
+    (item) =>
+      item.address && item?.address?.lat !== null && item?.address?.lng !== null
+  );
 
   function onBoundsChange(e) {
     const map = e.get('map');
@@ -24,21 +27,16 @@ export default function VacancyMap() {
     setBoundState(coords);
     dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
     dispatch(loadMapVacanciesAction());
-
-    // reducedPlacemarks = items
-    //   .reduce((acc, item) => [...acc, [item.address.lat, item.address.lng]], [])
-    //   .filter((item) => item[0] !== null && item[1] !== null);
+    // console.log();
+    // console.log(coords);
   }
 
   useEffect(() => {
+    dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
     dispatch(loadMapVacanciesAction());
   }, []);
 
-  // console.log(
-  //   items
-  //     .reduce((acc, item) => [...acc, [item.address.lat, item.address.lng]], [])
-  //     .filter((item) => item[0] !== null && item[1] !== null)
-  // );
+  // console.log('Фильтрованное', filteredItems);
 
   return (
     <div className='map'>
@@ -48,25 +46,23 @@ export default function VacancyMap() {
         defaultState={{ center: [55.75, 37.57], zoom: 12 }}
         style={{ width: 1040, height: 620 }}
       >
-        {/* {items
-          .reduce(
-            (acc, item) => [...acc, [item.address.lat, item.address.lng]],
-            []
-          )
-          .filter((item) => item[0] !== null && item[1] !== null)
-          .map((item) => {
-            return <Placemark geometry={item} />;
-          })} */}
         <Clusterer>
-          {items.map((item) => {
-            return item?.address?.lat !== null &&
-              item?.address?.lng !== null ? (
+          {filteredItems.map((item) => {
+            return (
               <Placemark
                 geometry={[item.address.lat, item.address.lng]}
-                options={{ preset: 'islands#circleDotIcon', hasBalloon: true }}
-                key={item.id} 
+                options={{
+                  // preset: 'islands#blueCircleDotIconWithCaption',
+                  iconCaptionMaxWidth: '100',
+                  // openEmptyBaloon: true,
+                }}
+                properties={{
+                  // hintContent: item.salary,
+                  balloonContentHeader: item.name
+                }}
+                key={item.id}
               />
-            ) : null;
+            );
           })}
         </Clusterer>
       </Map>
