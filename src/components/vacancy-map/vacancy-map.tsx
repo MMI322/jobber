@@ -1,4 +1,11 @@
-import { Map, Placemark, Clusterer } from 'react-yandex-maps';
+import {
+  Map,
+  Placemark,
+  Clusterer,
+  GeoObject,
+  ZoomControl,
+  SearchControl,
+} from 'react-yandex-maps';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Vacancies } from '../../types';
@@ -19,25 +26,29 @@ export default function VacancyMap() {
       item.address && item?.address?.lat !== null && item?.address?.lng !== null
   );
 
+  const chlen = 'chlen';
+
+  function mapVacanciesDispatch() {
+    dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
+    dispatch(loadMapVacanciesAction());
+  }
+
   function onBoundsChange(e) {
-    const map = e.get('map');
-    const coords = map.getBounds();
+    // const map = e.get('map');
+    const coords = e.get('newBounds');
     // const center = map.getCenter();
     // const zoom = map.getZoom();
     setBoundState(coords);
-    dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
-    dispatch(loadMapVacanciesAction());
-    // console.log();
-    // console.log(coords);
+    mapVacanciesDispatch();
+    // console.log(bounds);
   }
 
   useEffect(() => {
-    dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
-    dispatch(loadMapVacanciesAction());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    mapVacanciesDispatch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // console.log('Фильтрованное', filteredItems);
+  console.log('Фильтрованное', filteredItems);
 
   return (
     <div className='map'>
@@ -47,19 +58,26 @@ export default function VacancyMap() {
         defaultState={{ center: [55.75, 37.57], zoom: 12 }}
         style={{ width: 1040, height: 620 }}
       >
+        <ZoomControl />
+        <SearchControl />
         <Clusterer>
           {filteredItems.map((item) => {
             return (
               <Placemark
                 geometry={[item.address.lat, item.address.lng]}
-                options={{
-                  // preset: 'islands#blueCircleDotIconWithCaption',
-                  iconCaptionMaxWidth: '100',
-                  // openEmptyBaloon: true,
-                }}
                 properties={{
-                  // hintContent: item.salary,
-                  balloonContentHeader: item.name
+                  balloonContentBody: [
+                    '<address>',
+                    `<strong>${item.name}</strong>`,
+                    '<br/>',
+                    `Адрес: ${item?.address?.raw ? item.address.raw : ''} `,
+                    '<br/>',
+                    `<a href="#/vacancy/${item.id}" target=_blank>Подробнее</a>`,
+                    '</address>',
+                    '<br/>',
+                    `${item.snippet.requirement}`,
+                    '<br/>'
+                  ].join(''),
                 }}
                 key={item.id}
               />

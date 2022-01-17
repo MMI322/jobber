@@ -6,6 +6,7 @@ type Address = {
   city: string;
   lat: number;
   lng: number;
+  raw: string;
 };
 
 type Salary = {
