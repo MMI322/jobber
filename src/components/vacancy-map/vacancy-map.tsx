@@ -2,7 +2,6 @@ import {
   Map,
   Placemark,
   Clusterer,
-  GeoObject,
   ZoomControl,
   SearchControl,
 } from 'react-yandex-maps';
@@ -25,8 +24,6 @@ export default function VacancyMap() {
     (item) =>
       item.address && item?.address?.lat !== null && item?.address?.lng !== null
   );
-
-  const chlen = 'chlen';
 
   function mapVacanciesDispatch() {
     dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
@@ -76,7 +73,7 @@ export default function VacancyMap() {
                     '</address>',
                     '<br/>',
                     `${item.snippet.requirement}`,
-                    '<br/>'
+                    '<br/>',
                   ].join(''),
                 }}
                 key={item.id}
