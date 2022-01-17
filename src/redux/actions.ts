@@ -1,4 +1,3 @@
-import { join } from 'path/posix';
 import { Dispatch } from 'redux';
 import { State } from '../types';
 
@@ -23,7 +22,7 @@ export const loadVacanciesAction =
 
 export const loadMapVacanciesAction =
   () => (dispatch: Dispatch, getState: () => State) => {
-    const { searchMetro, searchValue } = getState().query;
+    const { searchValue } = getState().query;
     const searchMapValue = getState().searchMapValue;
     const query = [
       searchValue && `text=${searchValue}`,
