@@ -69,7 +69,7 @@ export default function VacancyMap() {
                     '<br/>',
                     `Адрес: ${item?.address?.raw ? item.address.raw : ''} `,
                     '<br/>',
-                    `<a href="#/vacancy/${item.id}" target=_blank>Подробнее</a>`,
+                    `<a href="/vacancy/${item.id}" target=_blank>Подробнее</a>`,
                     '</address>',
                     '<br/>',
                     `${item.snippet.requirement}`,
