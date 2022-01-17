@@ -6,10 +6,7 @@ import Button from '@mui/material/Button';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  loadMapVacanciesAction,
-  loadVacanciesAction,
-} from '../../redux/actions';
+import { loadVacanciesAction } from '../../redux/actions';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Station } from '../../types/metro';
 

@@ -34,6 +34,7 @@ export default function VacancyMap() {
   useEffect(() => {
     dispatch({ type: 'SET_MAP_SEARCH_VALUE', payload: boundState });
     dispatch(loadMapVacanciesAction());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // console.log('Фильтрованное', filteredItems);
