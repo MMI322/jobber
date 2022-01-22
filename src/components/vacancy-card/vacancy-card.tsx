@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../types';
 import { loadVacanciesAction } from '../../redux/actions';
+import { Map, Placemark, ZoomControl, SearchControl } from 'react-yandex-maps';
 
 function loadVacancies(
   id: string,
@@ -52,7 +53,7 @@ export function VacancyCard() {
 
   return (
     <Container maxWidth='lg'>
-      <Button variant='outlined' onClick={handleGoBack}> 
+      <Button variant='outlined' onClick={handleGoBack}>
         Вернутся к списку вакансий
       </Button>
       <div className='vacancy_card'>
@@ -62,13 +63,20 @@ export function VacancyCard() {
             <div className='vacancy_skills'>
               {vacancy?.key_skills
                 ? vacancy.key_skills.map((item, key) => {
-                    return <div className='vacancy_key_skill' key={key}>{item.name}</div>;
+                    return (
+                      <div className='vacancy_key_skill' key={key}>
+                        {item.name}
+                      </div>
+                    );
                   })
                 : null}
             </div>
             <div className='salary'>{vacancySalary}</div>
           </div>
-          <img src={vacancy?.employer?.logo_urls?.[240]} alt={vacancy?.employer?.name} />
+          <img
+            src={vacancy?.employer?.logo_urls?.[240]}
+            alt={vacancy?.employer?.name}
+          />
         </div>
 
         <div className='descrition'>
@@ -79,6 +87,42 @@ export function VacancyCard() {
                 : undefined
             }
           />
+          {vacancy?.address &&
+          vacancy?.address.lat !== null &&
+          vacancy?.address.lng !== null ? (
+            <div className='card_map'>
+              <Map
+                defaultState={{
+                  center: [vacancy.address?.lat, vacancy.address?.lng],
+                  zoom: 12,
+                }}
+                style={{ width: 1040, height: 620 }}
+              >
+                <ZoomControl />
+                <SearchControl />
+                <Placemark
+                  geometry={[vacancy.address.lat, vacancy.address.lng]}
+                  properties={{
+                    balloonContentBody: [
+                      '<address>',
+                      `<strong>${vacancy.name}</strong>`,
+                      '<br/>',
+                      `Адрес: ${
+                        vacancy?.address?.raw ? vacancy.address.raw : ''
+                      } `,
+                      '<br/>',
+                      `<a href="
+                      /vacancy/${vacancy.id}" target=_blank>Подробнее</a>`,
+                      '</address>',
+                      '<br/>',
+                      `${vacancy.snippet?.requirement ? vacancy.snippet?.requirement : ''}`,
+                      '<br/>',
+                    ].join(''),
+                  }}
+                />
+              </Map>
+            </div>
+          ) : null}
         </div>
       </div>
     </Container>

@@ -11,42 +11,77 @@ export function VacancyListItem({
   snippet,
   salary,
   id,
+  address,
 }: Vacancy) {
   return (
-    <Card className='card' variant='outlined' sx={{ borderRadius: 2, fontFamily: 'Cabin' }}> 
-      <CardContent>
+    <Card
+      className='card'
+      variant='outlined'
+      sx={{
+        borderRadius: 2,
+        fontFamily: 'Roboto',
+        border: 2,
+        borderColor: '#C4C4C4',
+      }}
+    >
+      <CardContent className='card-content'>
+        <Typography color='#C4C4C4' sx={{ fontSize: 12 }} gutterBottom>
+          Лучшее по вашему запросу
+        </Typography>
         <Typography
-          color='text.secondary'
+          color='#1976D2'
           className='card_header'
+          sx={{ fontSize: 26 }}
           gutterBottom
-          variant='h4'
         >
           {name}
         </Typography>
+        {employer.name && address?.street && address?.street !== null ? (
+          <Typography gutterBottom>
+            {employer.name}, {address.street}
+          </Typography>
+        ) : null}
         <Typography
           variant='body2'
           color='text.secondary'
           className='card_snippet_1'
           dangerouslySetInnerHTML={{ __html: snippet?.requirement }}
+          sx={{ fontSize: 15, color: '#000' }}
+          gutterBottom
         ></Typography>
         <Typography
           variant='body2'
           color='text.secondary'
           className='card_snippet_2'
           dangerouslySetInnerHTML={{ __html: snippet?.responsibility }}
+          sx={{ fontSize: 15, color: '#000' }}
+          gutterBottom
         ></Typography>
-        <Typography variant='h6' color='text.secondary' className='card_salary'>
+        <Typography
+          color='text.secondary'
+          className='card_salary'
+          gutterBottom
+          sx={{ fontSize: 15, color: '#000' }}
+        >
           {salary?.from} - {salary?.to} {salary?.currency}
         </Typography>
-        <Link to={'/vacancy/' + id}>Узнать подробнее</Link>
+        <Link to={'/vacancy/' + id}>
+          <Typography gutterBottom sx={{ fontSize: 12, color: '#1976D2' }}>
+            Узнать подробнее
+          </Typography>
+        </Link>
       </CardContent>
       <div className='card_image'>
-        <CardMedia
-          className='card_media'
-          component='img'
-          image={employer?.logo_urls?.['240']}
-          alt={employer?.name}
-        />
+        {employer?.logo_urls?.['240'] ? (
+          <CardMedia
+            className='card_media'
+            component='img'
+            image={employer?.logo_urls?.['240']}
+            alt={employer?.name}
+          />
+        ) : (
+          <div className='default-image'></div>
+        )}
       </div>
     </Card>
   );

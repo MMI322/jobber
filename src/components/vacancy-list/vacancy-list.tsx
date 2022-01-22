@@ -44,7 +44,7 @@ export function VacancyList() {
   return (
     <div>
       {vacancies.items.length !== 0 ? (
-        <div className='dohuya'>Найдено {found} вакансий, иди работать</div>
+        <div className='vacancyCount'>Найдено {found} вакансий</div>
       ) : null}
       <div className='list'>
         {items.map((item: Vacancy) => (
@@ -52,15 +52,13 @@ export function VacancyList() {
         ))}
       </div>
       {vacancies.found !== 0 ? (
-        <div className='pagination'>
-          <Stack spacing={2} sx={{ mt: 16 }}>
-            <Pagination
-              count={pages}
-              page={Number(currentPage) + 1}
-              onChange={handleChangePage}
-            />
-          </Stack>
-        </div>
+        <Stack spacing={2} sx={{ my: '16px', mx: 'auto', maxWidth: 400 }}>
+          <Pagination
+            count={pages}
+            page={Number(currentPage) + 1}
+            onChange={handleChangePage}
+          />
+        </Stack>
       ) : null}
     </div>
   );

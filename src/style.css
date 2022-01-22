@@ -9,13 +9,12 @@ li {
 
 .main-form {
   max-width: 1140px;
-  height: 235px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .main-form__top {
   max-width: 1140px;
-  margin: auto;
+  margin: 0 auto;
   display: flex;
 }
 
@@ -37,15 +36,11 @@ li {
 
 .main-form__bottom__buttons {
   width: 380px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .main-form__bottom {
   margin: 40px 0;
-}
-
-.header {
-  margin-bottom: 60px;
 }
 
 .search-button {
@@ -55,7 +50,7 @@ li {
 .main-form__bottom__buttons a button {
   margin: 0 10px;
 }
-.dohuya {
+.vacancyCount {
   margin: 35px auto;
   width: 500px;
   text-align: center;
@@ -63,8 +58,7 @@ li {
 }
 
 .card {
-  width: 1140px;
-  height: 300px;
+  max-width: 1140px;
   margin: 15px auto;
   display: flex;
   flex-wrap: wrap;
@@ -75,23 +69,25 @@ li {
   padding: 35px;
   max-width: 200px;
   max-height: 200px;
+  margin: 0 auto;
 }
 
 .card_image img {
-  margin: auto;
+  margin: 0 auto;
   max-width: 200px;
   max-height: 200px;
   border-radius: 5px;
 }
 
-.MuiCardContent-root {
-  padding: 10px;
+.card-content {
   width: 800px;
-  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .loading {
-  margin: auto;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -100,23 +96,16 @@ highlighttext {
   font-weight: 700;
 }
 
-.pagination {
-  max-width: 400px;
-  margin: auto;
-  position: absolute;
-  top: 590%;
-  left: 600px;
-  padding-bottom: 50px;
-}
-
 .vacancy_card {
-  margin: auto;
+  margin: 0 auto;
   max-width: 1140px;
 }
 
-.card_header {
-  display: flex;
-  justify-content: space-around;
+.default-image {
+  width: 167px;
+  background-color: #c4c4c4;
+  height: 167px;
+  border-radius: 14px;
 }
 
 .card_header_data {
@@ -124,14 +113,12 @@ highlighttext {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: stretch;
-
 }
 
 .vacancy_skills {
   display: flex;
   justify-content: space-between;
 }
-
 
 .vacancy_key_skill {
   background-color: #1976d2;
@@ -141,13 +128,14 @@ highlighttext {
   margin: 5px;
 }
 
-a, a:visited {
+a,
+a:visited {
   text-decoration: none;
 }
 
 .map {
   max-width: 1040px;
   max-height: 720px;
-  margin: auto;
+  margin: 0 auto;
   padding: 10px;
 }
